@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const ShortUrl = require('./models/shortUrl')
 const app = express()
 const bodyParser=require("body-parser")
+const userRoutes = require("./routes/user")
 app.use(bodyParser.json())
 mongoose.connect('mongodb://127.0.0.1:27017/urlShortener', {
   useNewUrlParser: true, useUnifiedTopology: true
@@ -10,16 +11,23 @@ mongoose.connect('mongodb://127.0.0.1:27017/urlShortener', {
 
 app.set('view engine', 'ejs')
 app.use(express.urlencoded({ extended: false }))
-
+app.use("/",userRoutes)
 app.get('/', async (req, res) => {
-  const shortUrls = await ShortUrl.find()
-  res.render('index', { shortUrls: shortUrls })
+  
+  res.render('index')
 })
-
+app.get('/home', async (req, res) => {
+  const shortUrls = await ShortUrl.find()
+  res.render('home', { shortUrls: shortUrls })
+})
+app.get('/signup', async (req, res) => {
+  
+  res.render('signup')
+})
 app.post('/shortUrls', async (req, res) => {
   await ShortUrl.create({ full: req.body.fullUrl })
 
-  res.redirect('/')
+  res.redirect('/home')
 })
 
 app.get('/:shortUrl', async (req, res) => {
