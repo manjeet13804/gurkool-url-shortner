@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const ShortUrl = require('./models/shortUrl')
 const app = express()
 const bodyParser=require("body-parser")
-app.use(bodyParser)
+app.use(bodyParser.json())
 mongoose.connect('mongodb://127.0.0.1:27017/urlShortener', {
   useNewUrlParser: true, useUnifiedTopology: true
 }).then(()=>console.log("db connected")).catch((err)=>{console.log(err)})
@@ -12,7 +12,6 @@ app.set('view engine', 'ejs')
 app.use(express.urlencoded({ extended: false }))
 
 app.get('/', async (req, res) => {
-  console.log("hello")
   const shortUrls = await ShortUrl.find()
   res.render('index', { shortUrls: shortUrls })
 })
