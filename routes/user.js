@@ -67,10 +67,7 @@ router.post("/login", body('email').isEmail(), async (req, res) => {
         let user = await User.findOne({ email });
 
         if (!user) {
-            return res.status(401).json({
-                status: "Failed",
-                message: "User doesnt exists"
-            });
+            return res.redirect("/signup")
         }
 
         // Load hash from your password DB.
